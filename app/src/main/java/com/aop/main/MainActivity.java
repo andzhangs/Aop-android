@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
     @IsCheckLogin
     public void jump(){
-        Log.i("CheckLoginAspectJ", "--------------- ");
+        Log.i("CheckLoginAspectJ", "-------success------- ");
     }
 
     private boolean loginStatus=false;
