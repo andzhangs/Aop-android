@@ -1,0 +1,42 @@
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * 表达式： execution(* com.dn..*(..)
+ * 重用这个表达式呢？这就需要用到@Pointcut注解了，@Pointcut注解是注解在一个空方法上的:
+ *     @Pointcut(value = "execution(* com.dn..*(..)")
+ *     fun pointcut(){
+ *     }
+ *
+ *     @Before(value = "pointcut()")
+ *     fun before(point: JoinPoint) {
+ *         println("匹配所有public方法,在方法执行之前打印: CSDN");
+ *     }
+ */
+@Aspect
+class TestAspect {
+
+    @Before(value = "execution(public * *(..))")
+    fun before(point: JoinPoint) {
+        println("匹配所有public方法,在方法执行之前打印: CSDN");
+    }
+
+    @Around(value = "execution(* *to(..))")
+    fun around(joinPoint: ProceedingJoinPoint) {
+        println("匹配所有to结尾方法,在方法执行之前打印：CSDN");
+        joinPoint.proceed()
+        println("匹配所有to结尾方法,在方法执行之后打印：LQR");
+    }
+
+    @After(value = "execution(* com.dn..*to(..))")
+    fun after(point: JoinPoint) {
+        println("匹配com.dn包下及其子包中以to结尾方法,在方法执行之后打印：CSDN_LQR");
+    }
+
+    @AfterReturning(value = "execution(Int com.dn.*(..))")
+    fun afterReturning(point: JoinPoint, returnValue: Any) {
+        println("匹配com.dn包下所有返回类型是int的方法，在方法返回结果之后打印：CSDN_LQR");
+    }
+
+    @AfterThrowing(value = "execution(Int com.dn.*(..))", throwing = "ex")
+    fun afterThrowing(ex: Throwable) {
+        println("匹配com.dn包下及其子包中的所有方法,当方法异常时，打印ex= ${ex.message} 报错的信息");
+    }
+}

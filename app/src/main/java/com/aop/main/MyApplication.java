@@ -2,9 +2,6 @@ package com.aop.main;
 
 import android.app.Application;
 import android.content.Context;
-import android.content.SharedPreferences;
-
-import java.util.PrimitiveIterator;
 
 /**
  * Code of ZHANG/ 2018/11/8
@@ -18,11 +15,7 @@ public class MyApplication extends Application {
         mApplication=this;
         SharedPreferencesHelper.init(this,this.getPackageName(),Context.MODE_PRIVATE);
     }
-
-
     public static synchronized MyApplication getInstance(){
-        return mApplication ;
+        return mApplication;
     }
-
-
 }

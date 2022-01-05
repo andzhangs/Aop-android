@@ -2,6 +2,8 @@ package com.aop.main;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
+
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.AfterReturning;
@@ -26,7 +28,7 @@ class CheckLoginAspectJ {
      */
     @Pointcut("execution(@com.aop.main.IsCheckLogin  * *(..))")
     public void executionCheckLogin(){
-        Log.i(TAG, "进入切面点: "+Thread.currentThread().getName());
+        Log.i(TAG, "进入切面点: "+Thread.currentThread());
     }
 
     /**
@@ -34,7 +36,7 @@ class CheckLoginAspectJ {
      */
     @Before("executionCheckLogin()")
     public void CheckBefore(){
-        Log.i(TAG, "CheckBefore: "+Thread.currentThread().getName());
+        Log.i(TAG, "CheckBefore: "+Thread.currentThread());
     }
 
     /**
@@ -45,7 +47,7 @@ class CheckLoginAspectJ {
      */
     @Around("executionCheckLogin()")
     public Object checkLogin(ProceedingJoinPoint joinPoint) throws Throwable{
-        Log.i(TAG, "checkLogin: "+Thread.currentThread().getName());
+        Log.i(TAG, "checkLogin: "+Thread.currentThread());
 
         Context context= null;
 
@@ -62,12 +64,14 @@ class CheckLoginAspectJ {
         IsCheckLogin checkLogin=signature.getMethod().getAnnotation(IsCheckLogin.class);
         if (checkLogin != null) {
             if (SharedPreferencesHelper.getInstance().getBooleanValueByKey(MainActivity.isLogin)) {
-                Log.i(TAG, "登录成功!: ");
+                Log.i(TAG, "登录成功!");
+                Toast.makeText(context, "登录成功!", Toast.LENGTH_SHORT).show();
                 return joinPoint.proceed();   //运行此函数， 则执行被注解方法
             }
-            Log.w(TAG, "请先登录!: ");
+            Log.w(TAG, "请先登录!");
+            Toast.makeText(context, "请先登录!", Toast.LENGTH_SHORT).show();
         }else {
-            Log.w(TAG, "checkLogin = null!: ");
+            Log.w(TAG, "checkLogin = null! ");
         }
         return null;
     }
@@ -80,7 +84,7 @@ class CheckLoginAspectJ {
      */
     @After("executionCheckLogin()")
     public void CheckAfter(){
-        Log.i(TAG, "CheckAfter: "+Thread.currentThread().getName());
+        Log.i(TAG, "CheckAfter: "+Thread.currentThread());
     }
 
 
@@ -89,7 +93,7 @@ class CheckLoginAspectJ {
      */
     @AfterReturning("executionCheckLogin()")
     public void CheckAfterReturning(){
-        Log.i(TAG, "CheckAfterReturning: "+Thread.currentThread().getName());
+        Log.i(TAG, "CheckAfterReturning: "+Thread.currentThread());
     }
 
 
@@ -98,7 +102,7 @@ class CheckLoginAspectJ {
      */
     @AfterThrowing("executionCheckLogin()")
     public void CheckAfterThrowing(){
-        Log.i(TAG, "CheckAfterThrowing: "+Thread.currentThread().getName());
+        Log.e(TAG, "CheckAfterThrowing: "+Thread.currentThread());
     }
 
 

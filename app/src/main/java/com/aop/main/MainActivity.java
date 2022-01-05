@@ -1,20 +1,21 @@
 package com.aop.main;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
-import javax.security.auth.login.LoginException;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
 
     private SharedPreferences mPreferences=null;
     public static final  String isLogin="isLogin";
+    private boolean loginStatus=false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,26 +24,29 @@ public class MainActivity extends AppCompatActivity {
         mPreferences=getSharedPreferences(this.getPackageName(), Context.MODE_PRIVATE);
     }
 
-    @IsCheckLogin
+    @IsCheckLogin()
     public void jump(){
         Log.i("CheckLoginAspectJ", "-------success------- ");
     }
 
-    private boolean loginStatus=false;
 
 
-    public void ClickView(View view) {
+    @SuppressLint("NonConstantResourceId")
+    public void clickView(View view) {
         switch (view.getId()) {
             case R.id.btn_Init:{
-                SharedPreferencesHelper.getInstance().setBooleanValue(isLogin,loginStatus);
                 loginStatus =!loginStatus;
-                Log.i("CheckLoginAspectJ", "登录值：: "+SharedPreferencesHelper.getInstance().getBooleanValueByKey(isLogin));
+                SharedPreferencesHelper.getInstance().setBooleanValue(isLogin,loginStatus);
+                String info="登录值：: "+SharedPreferencesHelper.getInstance().getBooleanValueByKey(isLogin);
+                Log.i("CheckLoginAspectJ",info);
+                Toast.makeText(this, info, Toast.LENGTH_SHORT).show();
                 break;
             }
             case R.id.btn_Login:{
                 jump();
                 break;
             }
+            default:break;
         }
     }
 }
