@@ -20,23 +20,22 @@ import org.aspectj.lang.reflect.MethodSignature;
 @Aspect
 class CheckLoginAspectJ {
 
-    private static final String TAG = "CheckLoginAspectJ";
-
+    public static final String TAG = "CheckLoginAspectJ";
 
     /**
      * 切面点
      */
-    @Pointcut("execution(@com.aop.main.IsCheckLogin  * *(..))")
+    @Pointcut(value = "execution(@com.aop.main.IsCheckLogin  * *(..))",argNames="executionCheckLogin")
     public void executionCheckLogin(){
-        Log.i(TAG, "进入切面点: "+Thread.currentThread());
+        Log.i(TAG, "进入切面点: "+Thread.currentThread().getName());
     }
 
     /**
      * 前置通知, 在目标执行之前执行通知
      */
-    @Before("executionCheckLogin()")
+    @Before(value = "executionCheckLogin()",argNames="CheckBefore")
     public void CheckBefore(){
-        Log.i(TAG, "CheckBefore: "+Thread.currentThread());
+        Log.i(TAG, "CheckBefore: "+Thread.currentThread().getName());
     }
 
     /**
@@ -45,9 +44,9 @@ class CheckLoginAspectJ {
      * @return
      * @throws Throwable
      */
-    @Around("executionCheckLogin()")
+    @Around(value = "executionCheckLogin()",argNames="checkLogin")
     public Object checkLogin(ProceedingJoinPoint joinPoint) throws Throwable{
-        Log.i(TAG, "checkLogin: "+Thread.currentThread());
+        Log.i(TAG, "checkLogin: "+Thread.currentThread().getName());
 
         Context context= null;
 
@@ -76,33 +75,29 @@ class CheckLoginAspectJ {
         return null;
     }
 
-
-
     /**
      * joinPoint.proceed（）调用后 才可调用
      * 后置通知, 目标执行后执行通知
      */
-    @After("executionCheckLogin()")
+    @After(value = "executionCheckLogin()")
     public void CheckAfter(){
-        Log.i(TAG, "CheckAfter: "+Thread.currentThread());
+        Log.i(TAG, "CheckAfter: "+Thread.currentThread().getName());
     }
-
 
     /**
      * 后置返回通知, 目标返回时执行通知
      */
-    @AfterReturning("executionCheckLogin()")
+    @AfterReturning(value ="executionCheckLogin()")
     public void CheckAfterReturning(){
-        Log.i(TAG, "CheckAfterReturning: "+Thread.currentThread());
+        Log.i(TAG, "CheckAfterReturning: "+Thread.currentThread().getName());
     }
-
 
     /**
      * 异常通知, 目标抛出异常时执行通知
      */
-    @AfterThrowing("executionCheckLogin()")
-    public void CheckAfterThrowing(){
-        Log.e(TAG, "CheckAfterThrowing: "+Thread.currentThread());
+    @AfterThrowing(value = "executionCheckLogin()",throwing = "ex",argNames = "CheckAfterThrowing")
+    public void CheckAfterThrowing(Throwable ex){
+        Log.e(TAG, "CheckAfterThrowing: "+Thread.currentThread().getName()+", "+ex);
     }
 
 
